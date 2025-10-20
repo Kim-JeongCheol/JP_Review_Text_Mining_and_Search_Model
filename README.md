@@ -1,1 +1,1 @@
-# JobPlanet_Review_Text_Mining_and_Search_Model
+# JP_Review_Text_Mining_and_Search_Model
