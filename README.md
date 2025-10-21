@@ -1,5 +1,5 @@
-# JobPlanet Review Text Mining  
-잡플래닛 리뷰 기반 기업 평판 분석 프로젝트 (SAPI 팀)
+# JobPlanet Review Text Mining and Search Model
+잡플래닛 리뷰 기반 텍스트 마이닝 & 검색 모델 프로젝트 (SAPI 팀)
 
 ---
 
