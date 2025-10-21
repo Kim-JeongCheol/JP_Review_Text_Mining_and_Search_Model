@@ -242,6 +242,8 @@
    ```
 
 4. **유사 리뷰 검색 예시**
+   <img width="973" height="513" alt="image" src="https://github.com/user-attachments/assets/391e8d27-9c42-45cc-89a9-3c4adfaff236" />
+
    > “야근” 키워드와 관련된 리뷰를 유사도 순으로 출력  
    ```python
    query_vec = vectorizer.transform(['야근'])
