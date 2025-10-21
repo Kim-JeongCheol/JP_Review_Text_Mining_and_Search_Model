@@ -1,5 +1,5 @@
 # JP_Review_Text_Mining_and_Search_Model — SAPI Team
-### 잡플래닛 리뷰 기반 텍스트 마이닝 & 검색 모델
+잡플래닛 리뷰 기반 텍스트 마이닝 & 검색 모델
 
 ---
 
