@@ -156,22 +156,22 @@
 
 
 
-**가설 1️⃣**: “이스트소프트는 장점보다 단점이 더 많은 회사일 것이다.”  
+**가설 1️⃣: “이스트소프트는 장점보다 단점이 더 많은 회사일 것이다.”**  
 <img width="974" height="647" alt="image" src="https://github.com/user-attachments/assets/253db8e7-f0f8-4355-8e53-7cca816621f7" />
 
-- Welch’s t-test로 검정  
+- Welch’s t-test 사용  
   ```python
   from scipy.stats import ttest_ind
-  t_stat, p_value = ttest_ind(df['pros_len'], df['cons_len'], equal_var=False)
+  t_stat, p_value = ttest_ind(df['pros_len'], df['cons_len'], equal_var = False)
   ```
   - p-value > 0.05 → 귀무가설 채택  
   - 결론: 통계적으로 유의한 차이가 없음  
   -> “이스트소프트는 장점보다 단점이 더 많은 회사라고 보기는 어렵다.”
    
-**가설 2️⃣**: “신입 교육의 부족이 지원자 감소의 원인이다.”  
+**가설 2️⃣: “신입 교육의 부족이 지원자 감소의 원인이다.”**  
 <img width="603" height="362" alt="image" src="https://github.com/user-attachments/assets/f3cca82b-7659-40fd-b9ae-fc17cbe1fbe4" />
  
-- 대응표본 t-검정 (Paired t-test)으로 검정  
+- 대응표본 t-검정 사용  
   ```python
   from scipy.stats import ttest_rel
   t_stat, p_value = ttest_rel(sentiment_df['긍정적 이미지'], sentiment_df['부정적 이미지'])
@@ -180,14 +180,41 @@
   - 결론: 신입 교육 관련 긍·부정 언급의 평균 차이는 통계적으로 유의하지 않음  
   → “신입 교육 부족이 지원자 감소의 주요 원인이라 보기는 어렵다."
 
-**가설 3️⃣**: “개발 부서의 업무 강도가 타 부서보다 높다.”  
-- ‘개발’, ‘야근’, ‘업무량’ 키워드 빈도 분석 → 유의미한 차이 없음  
+**가설 3️⃣: “개발 부서의 업무 강도가 타 부서보다 높다.”**  
+<img width="247" height="208" alt="image" src="https://github.com/user-attachments/assets/68d98ec4-0525-468c-ace1-93d764fecfcf" />
+
+- t-test 사용
+  ```python
+  from scipy.stats import ttest_ind
+  t_stat, p_value = ttest_ind(dev_group['업무_빈도'], others['업무_빈도'], equal_var=False)
+  ```
+  - p-value > 0.05 → 귀무가설 채택
+  - 결론: 개발 부서와 타 부서 간 업무 강도 차이는 통계적으로 유의하지 않음
+  - → "개발 부서의 업무 강도가 타 부서보다 높다고 보기는 어렵다."  
 
 **가설 4️⃣**: “인재 유출의 원인은 성장 가능성 부재이다.”  
-- ‘성장’, ‘커리어’, ‘비전’ 부정 감성 비율 높음 → 채택  
+<img width="198" height="266" alt="image" src="https://github.com/user-attachments/assets/61323262-2ed4-4ff6-8c64-f782288013e6" />
+
+- 카이제곱 검정 사용
+  ```python
+  from scipy.stats import chisquare
+  chi2_statistic, p_value = chisquare(observed_frequencies)
+  ```
+  - p-value < 0.05 → 대립가설 채택
+  - 결론: 이직 사유 유형 간 빈도 차이가 통계적으로 유의함
+  - → “'성장 기회 없음' 유형이 다른 사유보다 높은 빈도로 언급된다고 할 수 있다."
 
 **가설 5️⃣**: “운영진에게 쓴소리가 칭찬보다 많다.”  
-- 감성 점수 평균 비교 시 유의한 차이 없음 → 근거 미약  
+<img width="395" height="396" alt="image" src="https://github.com/user-attachments/assets/0fbd4e2f-542c-4902-a091-ae30a91f8936" />
+
+- 이항 검정 사용
+  ```python
+  from scipy.stats import binomtest
+  res = binomtest(n_neg, n_total, p = 0.5, alternative = 'greater')
+  ```
+  - p-value > 0.05 → 귀무가설 채택
+  - 결론: 운영진에 대한 부정적 언급이 칭찬보다 많다고 볼 통계적 근거 부족
+  - → "운영진에게 쓴소리가 칭찬보다 많다고 보기는 어렵다."
 
 ---
 
