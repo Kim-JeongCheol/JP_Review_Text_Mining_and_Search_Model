@@ -1,0 +1,189 @@
+# 🧠 JobPlanet Review Text Mining  
+잡플래닛 리뷰 기반 기업 평판 분석 프로젝트 (SAPI 팀)
+
+---
+
+## 🔍 목차  
+
+<details>
+<summary>목차 보기 (클릭)</summary>
+
+1. [프로젝트 개요](#-프로젝트-개요)  
+2. [기술 스택](#-기술-스택)  
+3. [데이터 수집](#-데이터-수집)  
+4. [데이터 전처리](#-데이터-전처리)  
+5. [EDA 및 가설 검정](#-eda-및-가설-검정)  
+6. [모델링](#-모델링)  
+7. [결과 및 인사이트](#-결과-및-인사이트)  
+8. [활용 방안 및 개선 아이디어](#-활용-방안-및-개선-아이디어)  
+9. [향후 계획](#-향후-계획)  
+
+</details>
+
+---
+
+## 📋 프로젝트 개요  
+
+**목표**  
+- 잡플래닛 리뷰 데이터를 활용해 특정 기업(이스트소프트)의 **장점·단점·경영진 의견**을 텍스트 마이닝으로 분석  
+- 실제 재직자들의 리뷰를 기반으로 기업문화 및 HR 개선 인사이트 도출  
+
+**역할**  
+- 팀장으로서 데이터 수집·EDA·가설 검정·모델링 총괄  
+- TF-IDF, 감성사전, KNN 기반 유사도 탐색 기법을 활용한 텍스트 분석 담당  
+
+**성과**  
+- 367건의 리뷰를 정제·분석하여 5개 가설 검증  
+- TF-IDF, 감성 분석, 키워드 유사도 모델링을 통한 **데이터 기반 기업문화 진단 체계 구축**  
+
+---
+
+## 🛠 기술 스택  
+
+- **언어**: Python 3.8+  
+- **데이터 처리**: pandas, numpy, scipy  
+- **자연어 처리**: konlpy, re, collections  
+- **시각화**: matplotlib, seaborn, wordcloud  
+- **모델링**: scikit-learn (TF-IDF, KNN)  
+- **감성 분석**: [KNU 한국어 감성사전](https://github.com/park1200656/KnuSentiLex)  
+- **환경**: Jupyter Notebook  
+
+---
+
+## 📊 데이터 수집  
+
+- **출처**: [JobPlanet - 이스트소프트 리뷰 페이지](https://www.jobplanet.co.kr/companies/58863/reviews/%EC%9D%B4%EC%8A%A4%ED%8A%B8%EC%86%8C%ED%94%84%ED%8A%B8)  
+- **수집 방법**: Selenium을 이용한 리뷰 크롤링 자동화  
+
+| 항목 | 내용 |
+|------|------|
+| **데이터 크기** | 367행 × 4열 |
+| **컬럼 구성** | 제목, 장점, 단점, 경영진에게 하고 싶은 말 |
+| **전처리 요약** | HTML 태그 제거, 결측치 처리, 불용어 제거, 형태소 단위 정제 |
+
+---
+
+## 🧹 데이터 전처리  
+
+1. **텍스트 정제**
+   - HTML 태그, 특수문자, 공백 제거  
+   - 불용어 제거(`stopwords`) 및 소문자 통일  
+   ```python
+   df['장점'] = df['장점'].str.replace('[^가-힣 ]', '', regex=True)
+   df['단점'] = df['단점'].str.replace('[^가-힣 ]', '', regex=True)
+   ```
+
+2. **형태소 분석**
+   - `Okt` 기반 명사 추출 → 텍스트 기반 키워드 분석  
+   ```python
+   from konlpy.tag import Okt
+   okt = Okt()
+   df['pros_nouns'] = df['장점'].apply(lambda x: okt.nouns(x))
+   ```
+
+3. **결측치 제거**
+   - `NaN` 값 제거 후 인덱스 재정렬  
+   ```python
+   df.dropna(inplace=True)
+   df.reset_index(drop=True, inplace=True)
+   ```
+
+---
+
+## 📈 EDA 및 가설 검정  
+
+**가설 1️⃣**: “이스트소프트는 장점보다 단점이 더 많은 회사일 것이다.”  
+- Welch’s t-test로 검정  
+  ```python
+  from scipy.stats import ttest_ind
+  t_stat, p_value = ttest_ind(df['pros_len'], df['cons_len'], equal_var=False)
+  ```
+  - p-value > 0.05 → 귀무가설 채택  
+  - 결론: 통계적으로 유의한 차이가 없음  
+
+**가설 2️⃣**: “신입 교육의 부족이 지원자 감소의 원인이다.”  
+- TF-IDF 기반 단어 중요도 분석 → ‘교육’, ‘신입’ 관련 단어 비중 낮음  
+
+**가설 3️⃣**: “개발 부서의 업무 강도가 타 부서보다 높다.”  
+- ‘개발’, ‘야근’, ‘업무량’ 키워드 빈도 분석 → 유의미한 차이 없음  
+
+**가설 4️⃣**: “인재 유출의 원인은 성장 가능성 부재이다.”  
+- ‘성장’, ‘커리어’, ‘비전’ 부정 감성 비율 높음 → 채택  
+
+**가설 5️⃣**: “운영진에게 쓴소리가 칭찬보다 많다.”  
+- 감성 점수 평균 비교 시 유의한 차이 없음 → 근거 미약  
+
+---
+
+## 🧠 모델링  
+
+1. **TF-IDF 벡터화**
+   ```python
+   from sklearn.feature_extraction.text import TfidfVectorizer
+   vectorizer = TfidfVectorizer(max_features=500)
+   X = vectorizer.fit_transform(df['단점'])
+   ```
+
+2. **KNN 기반 유사도 탐색**
+   ```python
+   from sklearn.neighbors import NearestNeighbors
+   model = NearestNeighbors(metric='cosine')
+   model.fit(X)
+   ```
+
+3. **감성 분석 (KNU 사전 활용)**
+   ```python
+   from KnuSentiLex import KnuSL
+   senti = KnuSL()
+   score = senti.data['야근']  # {'word': '야근', 'polarity': -1}
+   ```
+
+4. **유사 리뷰 검색 예시**
+   > “야근” 키워드와 관련된 리뷰를 유사도 순으로 출력  
+   ```python
+   query_vec = vectorizer.transform(['야근'])
+   distances, indices = model.kneighbors(query_vec)
+   ```
+
+---
+
+## 💡 결과 및 인사이트  
+
+| 구분 | 주요 키워드 | 해석 |
+|------|--------------|------|
+| **장점** | 자유, 분위기, 연차, 문화, 업무 | 수평적이고 자유로운 기업문화 중심 |
+| **단점** | 성장, 부족, 사람, 부서 | 성장 한계, 부서 간 불균형 존재 |
+| **운영진 의견** | 칭찬 < 쓴소리 | 관리 체계와 의사소통에 대한 개선 요구 |
+
+📈 **요약 인사이트**  
+- “성장 가능성 부재”는 인재 유출의 주요 원인 중 하나로 확인됨  
+- 직원들은 조직 분위기보다 **경영 구조적 개선**을 더 요구  
+- 단순한 복지 강화보다 **직무 성장 경로 확립**이 핵심 과제  
+
+---
+
+## 🚀 활용 방안 및 개선 아이디어  
+
+- **브랜딩 강화**: 긍정 키워드(‘복지’, ‘워라벨’) 중심 홍보 콘텐츠 제작  
+- **조직 진단**: 부정 감성 키워드 기반 리스크 모니터링 시스템 구축  
+- **이직 위험 예측**: 특정 부정 키워드 증가율을 기반으로 퇴사 위험도 평가  
+- **대시보드 구축 제안**: Streamlit 기반 키워드별 감성 분석 시각화  
+
+---
+
+## 📌 향후 계획  
+
+- **정교한 감성 분석 모델 도입**  
+  - 감성사전 → BERT 기반 감정 분류기로 전환  
+- **대시보드 시각화 고도화**  
+  - 부서별·기간별 감성 트렌드 추적 기능 추가  
+- **다중 기업 비교 분석 확장**  
+  - NHN, 카카오 등 동종 기업 리뷰와의 교차 분석  
+- **자동 보고서 생성**  
+  - ChatGPT API 연동으로 기업 평판 리포트 자동화  
+
+---
+
+> **작성자**: 김정철 (팀장 / 데이터 수집·EDA·가설 검정·모델링 총괄)  
+> **소속 팀**: SAPI (사피)  
+> **데이터 출처**: [JobPlanet](https://www.jobplanet.co.kr/)
