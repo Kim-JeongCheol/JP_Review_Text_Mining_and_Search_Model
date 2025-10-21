@@ -111,12 +111,15 @@
 ## 📈 EDA 및 가설 검정  
 
 <img width="983" height="413" alt="image" src="https://github.com/user-attachments/assets/8bea7ddc-e789-4f14-8ec8-22ccafee2aa8" />
+
 <EDA (1) - 장점/단점 빈도 TOP 10>
 
 <img width="574" height="459" alt="image" src="https://github.com/user-attachments/assets/61db7e22-455c-4ec6-a5e6-e8d6cf8bb6da" />
+
 <EDA (2) - 제목 WordCloud> * 나머지 WordCloud는 생략
 
 <img width="633" height="717" alt="image" src="https://github.com/user-attachments/assets/13a48daa-d7ad-4f2c-8adb-fb490da52b31" />
+
 <EDA (3) - 장점/단점 TF-IDF Top 10>
 
 **가설 1️⃣**: “이스트소프트는 장점보다 단점이 더 많은 회사일 것이다.”  
