@@ -1,4 +1,4 @@
-# 🧠 JobPlanet Review Text Mining  
+# JobPlanet Review Text Mining  
 잡플래닛 리뷰 기반 기업 평판 분석 프로젝트 (SAPI 팀)
 
 ---
