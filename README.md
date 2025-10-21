@@ -223,14 +223,14 @@
 1. **TF-IDF 벡터화**
    ```python
    from sklearn.feature_extraction.text import TfidfVectorizer
-   vectorizer = TfidfVectorizer(max_features=500)
+   vectorizer = TfidfVectorizer(max_features = 500)
    X = vectorizer.fit_transform(df['단점'])
    ```
 
 2. **KNN 기반 유사도 탐색**
    ```python
    from sklearn.neighbors import NearestNeighbors
-   model = NearestNeighbors(metric='cosine')
+   model = NearestNeighbors(metric = 'cosine')
    model.fit(X)
    ```
 
