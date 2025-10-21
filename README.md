@@ -128,7 +128,7 @@
 
 <img width="574" height="459" alt="image" src="https://github.com/user-attachments/assets/61db7e22-455c-4ec6-a5e6-e8d6cf8bb6da" />
 
-<EDA (2) - 제목 WordCloud> /n
+<EDA (2) - 제목 WordCloud>  
 **다른 WordCloud 결과는 생략하고 대표 이미지만 첨부하였다.*
 
 > WordCloud 결과, **‘회사’, ‘개발자’, ‘사람’, ‘기업’** 단어가 가장 크게 나타나  
