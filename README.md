@@ -153,8 +153,8 @@
 > 따라서 TF-IDF 결과는 리뷰 간의 **내용적 차별성을 드러내는 단어들**에  
 > 더 초점을 맞춘 분석이라고 볼 수 있다.
   
-<div style="margin-left: 40px; width: 85%;">
-<hr>
+<div align="left" style="padding-left:60px;">
+  <hr style="width:85%;border:1px solid #d0d0d0;">
 </div>
   
 **가설 1️⃣: “이스트소프트는 장점보다 단점이 더 많은 회사일 것이다.”**  
