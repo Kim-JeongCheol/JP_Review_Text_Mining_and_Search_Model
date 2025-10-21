@@ -155,7 +155,9 @@
 > 더 초점을 맞춘 분석이라고 볼 수 있다. 
 
 
+
 **가설 1️⃣**: “이스트소프트는 장점보다 단점이 더 많은 회사일 것이다.”  
+<img width="974" height="647" alt="image" src="https://github.com/user-attachments/assets/253db8e7-f0f8-4355-8e53-7cca816621f7" />
 
 - Welch’s t-test로 검정  
   ```python
@@ -164,9 +166,19 @@
   ```
   - p-value > 0.05 → 귀무가설 채택  
   - 결론: 통계적으로 유의한 차이가 없음  
-
+  - “이스트소프트는 장점보다 단점이 더 많은 회사라고 보기는 어렵다.”
+  - 
 **가설 2️⃣**: “신입 교육의 부족이 지원자 감소의 원인이다.”  
-- TF-IDF 기반 단어 중요도 분석 → ‘교육’, ‘신입’ 관련 단어 비중 낮음  
+<img width="603" height="362" alt="image" src="https://github.com/user-attachments/assets/f3cca82b-7659-40fd-b9ae-fc17cbe1fbe4" />
+ 
+- 대응표본 t-검정 (Paired t-test)으로 검정  
+  ```python
+  from scipy.stats import ttest_rel
+  t_stat, p_value = ttest_rel(sentiment_df['긍정적 이미지'], sentiment_df['부정적 이미지'])
+  ```
+  - p-value > 0.05 → 귀무가설 채택
+  - 결론: 신입 교육 관련 긍·부정 언급의 평균 차이는 통계적으로 유의하지 않음
+  → “신입 교육 부족이 지원자 감소의 주요 원인이라 보기는 어렵다."
 
 **가설 3️⃣**: “개발 부서의 업무 강도가 타 부서보다 높다.”  
 - ‘개발’, ‘야근’, ‘업무량’ 키워드 빈도 분석 → 유의미한 차이 없음  
